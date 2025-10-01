@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
@@ -31,16 +31,16 @@ export default function Signup() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
-  };
+  }, [errors]);
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
@@ -67,9 +67,9 @@ export default function Signup() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
@@ -77,12 +77,12 @@ export default function Signup() {
       // Ready for backend API integration
       alert('Account created successfully! Check console for form data.');
     }
-  };
+  }, [validateForm, formData]);
 
   return (
     <div className="min-h-screen flex">
       {/* Left Column - Brand Info */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 text-white p-12 flex-col justify-between">
+      <div className="hidden lg:flex lg:w-[40%] bg-gradient-to-br from-blue-600 to-blue-800 text-white p-8 xl:p-12 flex-col justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-4">AWARE</h1>
           <p className="text-blue-100 text-lg">
@@ -94,7 +94,7 @@ export default function Signup() {
           <div className="flex items-start space-x-4">
             <div className="flex-shrink-0">
               <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               </div>
@@ -111,7 +111,7 @@ export default function Signup() {
       </div>
 
       {/* Right Column - Signup Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-gray-50">
+      <div className="w-full lg:w-[60%] flex items-center justify-center p-6 sm:p-12 bg-gray-50">
         <div className="w-full max-w-md">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">Create your account</h2>
@@ -227,13 +227,13 @@ export default function Signup() {
 
           <p className="mt-6 text-center text-sm text-gray-600">
             By creating an account, you agree to our{' '}
-            <a href="#" className="text-blue-600 hover:text-blue-700">
+            <Link href="/terms" className="text-blue-600 hover:text-blue-700">
               Terms of Service
-            </a>{' '}
+            </Link>{' '}
             and{' '}
-            <a href="#" className="text-blue-600 hover:text-blue-700">
+            <Link href="/privacy" className="text-blue-600 hover:text-blue-700">
               Privacy Policy
-            </a>
+            </Link>
           </p>
         </div>
       </div>
