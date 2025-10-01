@@ -80,9 +80,9 @@ export default function Signup() {
   }, [validateForm, formData]);
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex overflow-hidden">
       {/* Left Column - Brand Info */}
-      <div className="hidden lg:flex lg:w-[40%] bg-gradient-to-br from-blue-600 to-blue-800 text-white p-8 xl:p-12 flex-col justify-between">
+      <div className="hidden lg:flex lg:w-[40%] flex-shrink-0 bg-gradient-to-br from-blue-600 to-blue-800 text-white p-8 xl:p-12 flex-col justify-between overflow-y-auto">
         <div>
           <h1 className="text-4xl font-bold mb-4">AWARE</h1>
           <p className="text-blue-100 text-lg">
